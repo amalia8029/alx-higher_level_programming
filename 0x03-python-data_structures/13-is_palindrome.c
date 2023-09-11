@@ -1,55 +1,72 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "lists.h"
+
 /**
- * pal - check if a list is palindrome
- * @arr: pointer to list
- * @index_a: primero indice (inicial)
- * @index_b: seg indice (final)
- * Return: return 1 if list is palindrome or 0 otherwise
+ * reverse_listint - reverses a linked list
+ * @head: pointer to the first node in the list
+ *
+ * Return: pointer to the first node in the new list
  */
-int pal(int *arr, int index_a, int index_b)
+void reverse_listint(listint_t **head)
 {
-	if (index_a > index_b)
-		return (1);
-	if (arr[index_a] != arr[index_b])
+	listint_t *prev = NULL;
+	listint_t *current = *head;
+	listint_t *next = NULL;
+
+	while (current)
 	{
-		return (0);
+		next = current->next;
+		current->next = prev;
+		prev = current;
+		current = next;
 	}
-	return (pal(arr, index_a + 1, index_b - 1));
+
+	*head = prev;
 }
+
 /**
- * is_palindrome - check if a single linked list is palindrome
- * @head: pointer to node listint_t
- * Return: return 1 if list is palindrome or 0 otherwise
+ * is_palindrome - checks if a linked list is a palindrome
+ * @head: double pointer to the linked list
+ *
+ * Return: 1 if it is, 0 if not
  */
 int is_palindrome(listint_t **head)
 {
-	int len = 0;
-	int i = 0; /*, j = 0, node_a = 0, node_b = 0, index_a = 0, index_b = 0;*/
-	const listint_t *temp = *head;
-	int *arr;
+	listint_t *slow = *head, *fast = *head, *temp = *head, *dup = NULL;
 
-	if (!*head)
+	if (*head == NULL || (*head)->next == NULL)
 		return (1);
-	while (temp)
+
+	while (1)
 	{
-		temp = temp->next;
-		len++;
+		fast = fast->next->next;
+		if (!fast)
+		{
+			dup = slow->next;
+			break;
+		}
+		if (!fast->next)
+		{
+			dup = slow->next->next;
+			break;
+		}
+		slow = slow->next;
 	}
-	temp = *head;
-	arr = malloc(sizeof(int) * len);
-	if (!arr)
-		return (0);
-	for (i = 0; i <= (len - 1); i++)
+
+	reverse_listint(&dup);
+
+	while (dup && temp)
 	{
-		arr[i] = temp->n;
-		temp = temp->next;
+		if (temp->n == dup->n)
+		{
+			dup = dup->next;
+			temp = temp->next;
+		}
+		else
+			return (0);
 	}
-	if (pal(arr, 0, len - 1) == 1)
-	{
-		free(arr);
+
+	if (!dup)
 		return (1);
-	}
-	free(arr);
-	return (0);}
+
+	return (0);
+}
