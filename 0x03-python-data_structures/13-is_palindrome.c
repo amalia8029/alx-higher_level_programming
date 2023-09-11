@@ -52,5 +52,4 @@ int is_palindrome(listint_t **head)
 		return (1);
 	}
 	free(arr);
-	return (0);
-}}
+	return (0);}
