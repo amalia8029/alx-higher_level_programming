@@ -1,54 +1,56 @@
-#include<list.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "lists.h"
 /**
- * is_palindrome - function to determine if singly linked list is a palindrome
- * @head: input pointer to head of singly linked list
- * Return: 1 if palindrome, 0 if not
+ * pal - check if a list is palindrome
+ * @arr: pointer to list
+ * @index_a: primero indice (inicial)
+ * @index_b: seg indice (final)
+ * Return: return 1 if list is palindrome or 0 otherwise
  */
-
+int pal(int *arr, int index_a, int index_b)
+{
+	if (index_a > index_b)
+		return (1);
+	if (arr[index_a] != arr[index_b])
+	{
+		return (0);
+	}
+	return (pal(arr, index_a + 1, index_b - 1));
+}
+/**
+ * is_palindrome - check if a single linked list is palindrome
+ * @head: pointer to node listint_t
+ * Return: return 1 if list is palindrome or 0 otherwise
+ */
 int is_palindrome(listint_t **head)
 {
-	listint_t *tmp;
-	int count = 0;
+	int len = 0;
+	int i = 0; /*, j = 0, node_a = 0, node_b = 0, index_a = 0, index_b = 0;*/
+	const listint_t *temp = *head;
+	int *arr;
 
-	if (head == NULL)
-		return (0);
-	if (*head == NULL)
+	if (!*head)
 		return (1);
-	tmp = (*head);
-	while (tmp->next != NULL && tmp->next->next != NULL)
+	while (temp)
 	{
-		count += 2;
-		tmp = tmp->next->next;
+		temp = temp->next;
+		len++;
 	}
-	if (tmp->next != NULL)
-		count++;
-	tmp = (*head);
-	return (palindrome_check(tmp, count));
-}
-
-/**
- * palindrome_check - recursive function to check if listint list is palidrome
- * @tmp_head: pointer to the current head of the list
- * @count: integer count of how many nodes from head to check the end
- * Return: 1 if palindrome, 0 if not
- */
-
-int palindrome_check(listint_t *tmp_head, int count)
-{
-	listint_t *tmp_end = tmp_head;
-	int count2 = 0;
-
-	/* move tmp_end to the end of where checking based on input count */
-	for (count2 = 0; count2 < count; count2++)
-		tmp_end = tmp_end->next;
-	/* count has successfully reached the middle (or past) of the list */
-	if (count <= 0)
-		return (1);
-	/* a mismatch is found, no palindrome */
-	if (tmp_head->n != tmp_end->n)
+	temp = *head;
+	arr = malloc(sizeof(int) * len);
+	if (!arr)
 		return (0);
-	/* otherwise, not at end and matching, move forward and call again */
-	tmp_head = tmp_head->next;
-	count -= 2;
-	return (palindrome_check(tmp_head, count));
-}
+	for (i = 0; i <= (len - 1); i++)
+	{
+		arr[i] = temp->n;
+		temp = temp->next;
+	}
+	if (pal(arr, 0, len - 1) == 1)
+	{
+		free(arr);
+		return (1);
+	}
+	free(arr);
+	return (0);
+}}
