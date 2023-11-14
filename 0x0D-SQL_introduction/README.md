@@ -35,7 +35,7 @@ name: VARCHAR(256)
 7-insert_value.sql: MySQL script that inserts a new row in the table first_table.
 Description:
 id = 89
-name = Holberton School
+name = Best School
 8. Count 89
 
 8-count_89.sql: MySQL script that displays the number records with id = 89 in the table first_table.
